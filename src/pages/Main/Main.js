@@ -52,12 +52,15 @@ const Main = ({usuario, pubSelected}) => {
     pubSelected(item._id.$oid);
     navigate("/publicacion");
   };
-
+ 
   /******************************** FILTROS ********************************/
 
   const handleSearchByTitulo = (value) => {
     filterDataByTitulo(value);
   };
+  const handleSearchByAutor = (value) => {
+    filterDataByAutor(value);
+  }
 
   const filterDataByTitulo = async (value) => {
     
@@ -76,6 +79,22 @@ const Main = ({usuario, pubSelected}) => {
     
   };
 
+  const filterDataByAutor = async (value) => {
+    
+    console.log("publicaciones " + publicaciones.at(0).titulo);
+
+    if (value !== ""){
+      //const result = await  axios.get("http://localhost:8000/publicaciones/autor/" + value);         
+      const result = await  axios.get("https://3hb1dm.deta.dev/publicaciones/autor/" + value);             
+      setPublicacionesFiltradas(result.data);
+     
+      console.log(value);
+     }else{
+       setDefault();
+       
+     }
+    
+  };
   const handleDelete = (value) => {
     deletePub(value);
   };
@@ -115,6 +134,18 @@ const Main = ({usuario, pubSelected}) => {
   
               </Grid>
             </Grid>
+
+            <Grid container spacing={2} sx={{ paddingTop: '10px' }}>
+              <Grid item md={3}>
+                <SearchBar
+                  style={Styler.pads}
+                  placeholder="Buscar por nombre de autor"
+                  onChange={(event) => handleSearchByAutor(event.target.value)}
+                  searchBarWidth='720px'
+                />
+  
+              </Grid>
+            </Grid>
             </Container>
 
             <Box >
@@ -123,8 +154,9 @@ const Main = ({usuario, pubSelected}) => {
 
               {publicacionesFiltradas.map(item => (
                 <div>
-                  <h2>{item.autor}</h2>
-                  <Card Card sx={{ width:'650px' , height:'760px' ,  marginRight:'10px', marginBottom:'10px',  border: '3px solid #BF40BF' ,  padding:"5px"  ,  borderRadius: 5}} >
+                  <h2>{item.autor} </h2>
+                  
+                  <Card Card sx={{ width:'650px' , height:'800px' ,  marginRight:'10px', marginBottom:'10px',  border: '3px solid #BF40BF' ,  padding:"5px"  ,  borderRadius: 5}} >
                     <CardMedia
                       image={item.foto}
                       title={item.titulo}
@@ -132,6 +164,7 @@ const Main = ({usuario, pubSelected}) => {
                     <CardContent>
                       <h2>{item.titulo}</h2>
                       <p>Ubicacion: {item.ubicacion}</p>
+                      <p>Fecha: {(new Date(item.fecha.$date).toDateString())}</p>
                       <Box sx={{overflow: 'auto', p:1, m:1, height:"475px"}}> <img src={item.foto} alt="image" /></Box>
                       <p><h3>Likes:{item.likes.length}</h3></p>
                       <p><h3>Comentarios:{item.comentarios.length}</h3></p>

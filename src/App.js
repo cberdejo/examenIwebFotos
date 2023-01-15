@@ -26,7 +26,7 @@ function App() {
          
         </Routes>
       </BrowserRouter>
-      <Pie texto="Cacagram" />
+      <Pie texto="Aplicacion de chris : )" />
     </GoogleOAuthProvider>
   );
 }

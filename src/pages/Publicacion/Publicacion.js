@@ -149,6 +149,7 @@ const Publicacion = ({usuario, publicacionId}) => {
                     <Titulo titulo="Información" />
                     <h2>Autor: {pubSelected.autor}</h2>
                     <h2>{pubSelected.titulo}</h2>
+                    <p>{(new Date(pubSelected.fecha.$date).toDateString())}</p>
                     <h4>{pubSelected.ubicacion}</h4>
                     <p><img src={pubSelected.foto} alt="image" /></p>
                     
@@ -183,6 +184,7 @@ const Publicacion = ({usuario, publicacionId}) => {
                     <h2>Comentarios:</h2>
                     {pubSelected.comentarios.map(comentario => (
                       <div>
+                        <h4> {comentario.autor} </h4>
                           <Box
                             component="span"
                             sx={{
@@ -202,7 +204,7 @@ const Publicacion = ({usuario, publicacionId}) => {
                             height:"100px"
                             }}
                             >
-                                <p> {comentario.autor} </p>
+                                
                                 <Typography align = "justify" paragraph="true" overflor="scroll" height="1px"> {comentario.texto} </Typography> 
 
                          </Box>
