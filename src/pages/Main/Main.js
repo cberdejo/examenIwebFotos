@@ -30,8 +30,8 @@ const Main = ({usuario, pubSelected}) => {
 
   const getPublicaciones = async () => {
     
-    // const response = await axios.get("http://localhost:8000/publicaciones");
-    const response = await axios.get("http://localhost:8000/publicaciones");
+    // const response = await axios.get("https://3hb1dm.deta.dev/publicaciones");
+    const response = await axios.get("https://3hb1dm.deta.dev/publicaciones");
     setPublicaciones(response.data)
     setPublicacionesFiltradas(publicaciones)
     setCargando(false);
@@ -65,7 +65,7 @@ const Main = ({usuario, pubSelected}) => {
 
     if (value !== ""){
       //const result = await  axios.get("http://localhost:8000/publicaciones/titulo/" + value);         
-      const result = await  axios.get("http://localhost:8000/publicaciones/titulo/" + value);             
+      const result = await  axios.get("https://3hb1dm.deta.dev/publicaciones/titulo/" + value);             
       setPublicacionesFiltradas(result.data);
      
       console.log(value);
@@ -82,7 +82,7 @@ const Main = ({usuario, pubSelected}) => {
 
   const deletePub = async (value) => {
     //axios.delete("http://localhost:8000/publicaciones/" + value);
-    axios.delete("http://localhost:8000/publicaciones/" + value);
+    axios.delete("https://3hb1dm.deta.dev/publicaciones/" + value);
     console.log("Publicacion eliminada");
     setCargando(true);
     getPublicaciones();
@@ -161,7 +161,7 @@ const Main = ({usuario, pubSelected}) => {
               <h2>Publicaciones:</h2>
               <Container maxWidth="xl" sx={{ mb: 3 }}>
                       
-              <Mapa publicaciones={publicaciones} />                
+              <Mapa publicaciones={publicacionesFiltradas} />                
               </Container>
           
 

@@ -32,7 +32,7 @@ const Publicacion = ({usuario, publicacionId}) => {
 
     const initPublicacion = async () => {
         //   const response = await axios.get("http://localhost:8000/publicaciones/id/" + publicacionId);
-        const response = await axios.get("http://localhost:8000/publicaciones/id/" + publicacionId);
+        const response = await axios.get("https://3hb1dm.deta.dev/publicaciones/id/" + publicacionId);
         setPubSelected(response.data);
         setCargando(false);
 
@@ -66,7 +66,7 @@ const Publicacion = ({usuario, publicacionId}) => {
     const likePulsado = async () => {
        
         //axios.post("http://localhost:8000/publicaciones/" + pubSelected._id.$oid +"/like?string=" + usuario);
-        axios.post("http://localhost:8000/publicaciones/" + pubSelected._id.$oid +"/like?string=" + usuario);
+        axios.post("https://3hb1dm.deta.dev/publicaciones/" + pubSelected._id.$oid +"/like?string=" + usuario);
       
         setCargando(true);
         initPublicacion();
@@ -77,7 +77,7 @@ const Publicacion = ({usuario, publicacionId}) => {
 
     const dislikePulsado = async () => {
          //axios.post("http://localhost:8000/publicaciones/" + pubSelected._id.$oid +"/like?string=" + usuario);
-         axios.post("http://localhost:8000/publicaciones/" + pubSelected._id.$oid +"/dislike?string=" + usuario);
+         axios.post("https://3hb1dm.deta.dev/publicaciones/" + pubSelected._id.$oid +"/dislike?string=" + usuario);
        
          setCargando(true);
          initPublicacion();
@@ -98,7 +98,7 @@ const Publicacion = ({usuario, publicacionId}) => {
             );
             */
 
-            axios.post("http://localhost:8000/publicaciones/addComentario/" + pubSelected._id.$oid, 
+            axios.post("https://3hb1dm.deta.dev/publicaciones/addComentario/" + pubSelected._id.$oid, 
                 {
                 "autor": usuario, 
                 "texto" : comment
@@ -113,8 +113,8 @@ const Publicacion = ({usuario, publicacionId}) => {
       
     };
     const borrarComentario = async (comentario) => {
-
-        axios.post("http://localhost:8000/publicaciones/deleteComentario/" + pubSelected._id.$oid, comentario  );
+        // axios.post("http://localhost:8000/publicaciones/deleteComentario/" + pubSelected._id.$oid, comentario  );
+        axios.post("https://3hb1dm.deta.dev/publicaciones/deleteComentario/" + pubSelected._id.$oid, comentario  );
 
         setCargando(true);
         initPublicacion();

@@ -20,7 +20,7 @@ const MainAppBar = ({ login }) => {
 
   const logIn = (token) => {
     // axios.post("http://localhost:8000/user/" + token.credential).then((response) => {
-    axios.post("http://localhost:8000/user/" + token.credential).then((response) => {
+    axios.post("https://3hb1dm.deta.dev/user/" + token.credential).then((response) => {
       setPhoto(response.data.foto);
       login(response.data.usuario);
       setLog(true);

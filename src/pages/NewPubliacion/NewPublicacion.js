@@ -49,7 +49,8 @@ const NewPublicacion = ({usuario}) => {
     const addPublicacion = (data) => {
         console.log(values);
         if(values.imagen !== ""){
-            axios.post("http://localhost:8000/publicaciones/crear",
+            // axios.post("http://localhost:8000/publicaciones/crear",
+            axios.post("https://3hb1dm.deta.dev/publicaciones/crear",
                 {
 
                     "autor" : usuario,
