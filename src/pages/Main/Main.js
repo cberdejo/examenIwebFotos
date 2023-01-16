@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Styler } from '../../components/Styler/Styler';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Slider, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import axios from 'axios';
 import Titulo from '../../components/common/Titulo/Titulo';
@@ -19,14 +19,17 @@ import CardActions from '@mui/material/CardActions';
 import Mapa from '../../components/Mapa/Mapa';
 
 
+
+
+
 const Main = ({usuario, pubSelected}) => {
 
   const navigate = useNavigate();
   const [cargando, setCargando] = useState(true);
   const [publicaciones, setPublicaciones] = useState([]);
   const [publicacionesFiltradas, setPublicacionesFiltradas] = useState([]);
-
- 
+  const [addressFilter, setAddressFilter] = useState("");
+  const [radio, setRadio] = useState(1);
 
   const getPublicaciones = async () => {
     
@@ -52,6 +55,19 @@ const Main = ({usuario, pubSelected}) => {
     pubSelected(item._id.$oid);
     navigate("/publicacion");
   };
+
+  const handleDelete = (value) => {
+    deletePub(value);
+  };
+
+  const deletePub = async (value) => {
+    //axios.delete("http://localhost:8000/publicaciones/" + value);
+    axios.delete("https://3hb1dm.deta.dev/publicaciones/" + value);
+    console.log("Publicacion eliminada");
+    setCargando(true);
+    getPublicaciones();
+  }
+  
  
   /******************************** FILTROS ********************************/
 
@@ -61,6 +77,11 @@ const Main = ({usuario, pubSelected}) => {
   const handleSearchByAutor = (value) => {
     filterDataByAutor(value);
   }
+  const handleSearchByAddress = () => {
+    console.log(addressFilter +" : " + radio);
+    filterDataByAddress();
+  }
+
 
   const filterDataByTitulo = async (value) => {
     
@@ -95,19 +116,18 @@ const Main = ({usuario, pubSelected}) => {
      }
     
   };
-  const handleDelete = (value) => {
-    deletePub(value);
+
+  const filterDataByAddress = async () => {
+    
+   
+      //const result = await  axios.get("http://localhost:8000/publicaciones/titulo/" + value);         
+      const result = await  axios.get("https://3hb1dm.deta.dev/publicaciones/direccion/" + addressFilter + "/" + radio);             
+      setPublicacionesFiltradas(result.data);
+     
+    
   };
 
-  const deletePub = async (value) => {
-    //axios.delete("http://localhost:8000/publicaciones/" + value);
-    axios.delete("https://3hb1dm.deta.dev/publicaciones/" + value);
-    console.log("Publicacion eliminada");
-    setCargando(true);
-    getPublicaciones();
-  }
- 
-
+  
   /******************************** CARGANDO ********************************/
   if (cargando) {
     return (
@@ -119,12 +139,12 @@ const Main = ({usuario, pubSelected}) => {
     
       return (
         <div class="page" style={Styler.page}>
-          <Container maxWidth="xl" sx={{ mb: 3 }}>
+          <Container maxWidth="xl" spacing={2} sx={{ mb: 3 }}>
             <Titulo titulo="Bienvenido a APP" />
-  
-  
-            <Grid container spacing={2} sx={{ paddingTop: '10px' }}>
-              <Grid item md={3}>
+            <Titulo titulo = "Filtros"/>  
+          <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="subtitle1">Busca por nombre de publicacion</Typography>
+            <Grid container spacing={2} sx={{ paddingTop: '10px' ,  border: '1px solid'}}>
+              <Grid item md={8}>
                 <SearchBar
                   style={Styler.pads}
                   placeholder="Buscar por nombre de publicacion"
@@ -134,58 +154,89 @@ const Main = ({usuario, pubSelected}) => {
   
               </Grid>
             </Grid>
-
-            <Grid container spacing={2} sx={{ paddingTop: '10px' }}>
-              <Grid item md={3}>
+            <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="subtitle1">Busca por nombre de autor</Typography>
+            <Grid container spacing={2} sx={{ paddingTop: '10px' ,  border: '1px solid'}}>
+              <Grid item md={8}>
                 <SearchBar
                   style={Styler.pads}
                   placeholder="Buscar por nombre de autor"
                   onChange={(event) => handleSearchByAutor(event.target.value)}
                   searchBarWidth='720px'
                 />
-  
+             
               </Grid>
+            </Grid>
+            <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="subtitle1">Busca por direccion</Typography>
+            <Grid container spacing={2} sx={{ paddingTop: '10px' , border: '1px solid' }}>
+              <Grid item md={4}>
+                <SearchBar
+                  style={Styler.pads}
+                  placeholder="Buscar por dirección"
+                  onChange={(event) => setAddressFilter(event.target.value)}
+                  searchBarWidth='720px'
+                />
+              </Grid>
+              <Grid item md={3}>
+              <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="body1"> Radio (KM)</Typography>
+                  <Slider 
+                  
+                    min = {1}
+                    step={1}
+                    max={500}
+                    onChange={(event) => setRadio(event.target.value)}
+                    track={"normal"}
+                    valueLabelDisplay={"auto"}
+                  
+                  />
+                 
+              </Grid>
+              <Grid item md ={4} sx={{paddingLeft:'200px'}}>
+                <Button variant="outlined" color="success" onClick={() => handleSearchByAddress()}>Buscar</Button>
+                <Button variant="outlined" color="success" onClick={() => setDefault()}>Todas</Button>
+              </Grid>
+          
+              
             </Grid>
             </Container>
 
             <Box >
+            <Titulo titulo = "Publicaciones"/>  
+              <Grid container   rowSpacing={3}  columnSpacing={3} align={"center"}>
+                
+                {publicacionesFiltradas.map(item => (
+                  <div>
+                    <h2>{item.autor} </h2>
+                    
+                    <Card Card sx={{ width:'650px' , height:'800px' ,  marginRight:'10px', marginBottom:'10px',  border: '3px solid #BF40BF' ,  padding:"5px"  ,  borderRadius: 5}} >
+                      <CardMedia
+                        image={item.foto}
+                        title={item.titulo}
+                      />
+                      <CardContent>
+                        <h2>{item.titulo}</h2>
+                        <p>Ubicacion: {item.ubicacion}</p>
+                        <p>Fecha: {(new Date(item.fecha.$date).toDateString())}</p>
+                        <Box sx={{overflow: 'auto', p:1, m:1, height:"475px"}}> <img src={item.foto} alt="image" /></Box>
+                        <p><h3>Likes:{item.likes.length}</h3></p>
+                        <p><h3>Comentarios:{item.comentarios.length}</h3></p>
+                      </CardContent>
+                        
+                      <CardActions>
+                      <Button variant="contained" onClick={() => handleButton(item)}>Ver mas</Button>
 
-              <Grid container rowSpacing={3}  columnSpacing={2} align={"center"}>
+                      {usuario === item.autor && 
+                        <div>
+                          <Button variant="contained" color="error" onClick={() => handleDelete(item._id.$oid)}>Borrar</Button>
+                        </div>
 
-              {publicacionesFiltradas.map(item => (
-                <div>
-                  <h2>{item.autor} </h2>
-                  
-                  <Card Card sx={{ width:'650px' , height:'800px' ,  marginRight:'10px', marginBottom:'10px',  border: '3px solid #BF40BF' ,  padding:"5px"  ,  borderRadius: 5}} >
-                    <CardMedia
-                      image={item.foto}
-                      title={item.titulo}
-                    />
-                    <CardContent>
-                      <h2>{item.titulo}</h2>
-                      <p>Ubicacion: {item.ubicacion}</p>
-                      <p>Fecha: {(new Date(item.fecha.$date).toDateString())}</p>
-                      <Box sx={{overflow: 'auto', p:1, m:1, height:"475px"}}> <img src={item.foto} alt="image" /></Box>
-                      <p><h3>Likes:{item.likes.length}</h3></p>
-                      <p><h3>Comentarios:{item.comentarios.length}</h3></p>
-                    </CardContent>
-                      
-                    <CardActions>
-                    <Button variant="contained" onClick={() => handleButton(item)}>Ver mas</Button>
+                      }
+                      </CardActions>
+  
+                    </Card>
 
-                    {usuario === item.autor && 
-                      <div>
-                        <Button variant="contained" color="error" onClick={() => handleDelete(item._id.$oid)}>Borrar</Button>
-                      </div>
-
-                    }
-                    </CardActions>
- 
-                  </Card>
-
-                </div>
-                  
-              ))}
+                  </div>
+                    
+                ))}
                 
               </Grid>
 
