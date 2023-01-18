@@ -22,7 +22,7 @@ const MainAppBar = ({ login }) => {
     // axios.post("http://localhost:8000/user/" + token.credential).then((response) => {
     axios.post("https://3hb1dm.deta.dev/user/" + token.credential).then((response) => {
       setPhoto(response.data.foto);
-      login(response.data.usuario);
+      login(response.data);
       setLog(true);
       navigate("/")
     });
@@ -68,9 +68,9 @@ const MainAppBar = ({ login }) => {
 
   const handleClick = ( ) => {
     if (log === true){
-      navigate("/newPublicacion");
+      navigate("/perfil");
     }else{
-      alert("Inicia sesión para subir una publicacion");
+      alert("Inicia sesión para consultar datos de perfil");
     }
     
   };
@@ -100,7 +100,7 @@ const MainAppBar = ({ login }) => {
               textDecoration: 'none',
             }}
           >
-            APP
+            ParkingNET
           </Typography>
 
 
@@ -110,10 +110,10 @@ const MainAppBar = ({ login }) => {
               sx={{ my: 2, color: 'white', display: 'block' }}
               onClick={() => handleClick() }
             >
-              Nueva Publicacion
+              Perfil
               <div
                 sx={Styler.text}
-                primary="NewPublicacion"
+                primary="Perfil"
               />
             </CommonButton>
           </Box>

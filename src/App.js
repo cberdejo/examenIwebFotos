@@ -5,12 +5,11 @@ import Pie from './components/common/Pie/Pie';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Main from "./pages/Main/Main";
-import Publicacion from './pages/Publicacion/Publicacion';
-import NewPublicacion from './pages/NewPubliacion/NewPublicacion';
+import Perfil from './pages/Perfil/Perfil';
 
 function App() {
   const [user, setUser] = useState("");
-  const [publicacionSeleccionada, setPublcacion] = useState();
+  
   const idCliente = "922880846069-52lfplvtl0in8495pre52fmcu7sntidm.apps.googleusercontent.com"
 
   return (
@@ -20,13 +19,14 @@ function App() {
           login={setUser}
         />
         <Routes>
-          <Route path="" element={<Main usuario = {user} pubSelected={setPublcacion} />} />
-          <Route path="publicacion" element={<Publicacion usuario={user} publicacionId={publicacionSeleccionada} />} /> 
-          <Route path="newPublicacion" element={<NewPublicacion usuario={user} />} />
+          <Route path="" element={<Main usuario = {user} />} />
+          
+          <Route path="perfil" element={<Perfil usuario={user} />} />
+         
          
         </Routes>
       </BrowserRouter>
-      <Pie texto="Aplicacion de chris : )" />
+      <Pie texto="ParkingNet" />
     </GoogleOAuthProvider>
   );
 }

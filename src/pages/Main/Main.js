@@ -26,105 +26,51 @@ const Main = ({usuario, pubSelected}) => {
 
   const navigate = useNavigate();
   const [cargando, setCargando] = useState(true);
-  const [publicaciones, setPublicaciones] = useState([]);
-  const [publicacionesFiltradas, setPublicacionesFiltradas] = useState([]);
+  const [aparcamientos, setAparcamientos] = useState([]);
+  const [aparcamientosFiltrados, setAparcamientosFiltrados] = useState([]);
   const [addressFilter, setAddressFilter] = useState("");
-  const [radio, setRadio] = useState(1);
 
-  const getPublicaciones = async () => {
+
+  const getAparcamientos = async () => {
     
-    // const response = await axios.get("https://3hb1dm.deta.dev/publicaciones");
-    const response = await axios.get("https://3hb1dm.deta.dev/publicaciones");
-    setPublicaciones(response.data)
-    setPublicacionesFiltradas(publicaciones)
+    // const response = await axios.get("http:localhost:8000/aparcamientos");
+    const response = await axios.get("https://3hb1dm.deta.dev/aparcamientos");
+    setAparcamientos(response.data)
+    setAparcamientosFiltrados(aparcamientos)
     setCargando(false);
 
   };
 
   const setDefault = () =>{
-    setPublicacionesFiltradas(publicaciones);
+    setAparcamientosFiltrados(aparcamientos);
     
   };
 
   useEffect(() => {
-    getPublicaciones()
+    getAparcamientos();
+    console.log(aparcamientos);
   }, [cargando]);
 
-  const handleButton = (item) =>{
-    console.log(item);
-    pubSelected(item._id.$oid);
-    navigate("/publicacion");
-  };
-
-  const handleDelete = (value) => {
-    deletePub(value);
-  };
-
-  const deletePub = async (value) => {
-    //axios.delete("http://localhost:8000/publicaciones/" + value);
-    axios.delete("https://3hb1dm.deta.dev/publicaciones/" + value);
-    console.log("Publicacion eliminada");
-    setCargando(true);
-    getPublicaciones();
-  }
   
  
   /******************************** FILTROS ********************************/
 
-  const handleSearchByTitulo = (value) => {
-    filterDataByTitulo(value);
-  };
-  const handleSearchByAutor = (value) => {
-    filterDataByAutor(value);
-  }
+ 
   const handleSearchByAddress = () => {
-    console.log(addressFilter +" : " + radio);
+    
     filterDataByAddress();
   }
+  
 
-
-  const filterDataByTitulo = async (value) => {
-    
-    console.log("publicaciones " + publicaciones.at(0).titulo);
-
-    if (value !== ""){
-      //const result = await  axios.get("http://localhost:8000/publicaciones/titulo/" + value);         
-      const result = await  axios.get("https://3hb1dm.deta.dev/publicaciones/titulo/" + value);             
-      setPublicacionesFiltradas(result.data);
-     
-      console.log(value);
-     }else{
-       setDefault();
-       
-     }
-    
-  };
-
-  const filterDataByAutor = async (value) => {
-    
-    console.log("publicaciones " + publicaciones.at(0).titulo);
-
-    if (value !== ""){
-      //const result = await  axios.get("http://localhost:8000/publicaciones/autor/" + value);         
-      const result = await  axios.get("https://3hb1dm.deta.dev/publicaciones/autor/" + value);             
-      setPublicacionesFiltradas(result.data);
-     
-      console.log(value);
-     }else{
-       setDefault();
-       
-     }
-    
-  };
 
   const filterDataByAddress = async () => {
     
    
-      //const result = await  axios.get("http://localhost:8000/publicaciones/titulo/" + value);         
-      const result = await  axios.get("https://3hb1dm.deta.dev/publicaciones/direccion/" + addressFilter + "/" + radio);             
-      setPublicacionesFiltradas(result.data);
-     
-    
+      //const result = await  axios.get("http://localhost:8000/aparcamientos/direccion/" + addressFilter);         
+      const result = await  axios.get("https://3hb1dm.deta.dev/aparcamientos/direccion/" + addressFilter);             
+      setAparcamientosFiltrados(result.data);
+      console.log(addressFilter)
+      
   };
 
   
@@ -140,32 +86,9 @@ const Main = ({usuario, pubSelected}) => {
       return (
         <div class="page" style={Styler.page}>
           <Container maxWidth="xl" spacing={2} sx={{ mb: 3 }}>
-            <Titulo titulo="Bienvenido a APP" />
-            <Titulo titulo = "Filtros"/>  
-          <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="subtitle1">Busca por nombre de publicacion</Typography>
-            <Grid container spacing={2} sx={{ paddingTop: '10px' ,  border: '1px solid'}}>
-              <Grid item md={8}>
-                <SearchBar
-                  style={Styler.pads}
-                  placeholder="Buscar por nombre de publicacion"
-                  onChange={(event) => handleSearchByTitulo(event.target.value)}
-                  searchBarWidth='720px'
-                />
-  
-              </Grid>
-            </Grid>
-            <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="subtitle1">Busca por nombre de autor</Typography>
-            <Grid container spacing={2} sx={{ paddingTop: '10px' ,  border: '1px solid'}}>
-              <Grid item md={8}>
-                <SearchBar
-                  style={Styler.pads}
-                  placeholder="Buscar por nombre de autor"
-                  onChange={(event) => handleSearchByAutor(event.target.value)}
-                  searchBarWidth='720px'
-                />
-             
-              </Grid>
-            </Grid>
+            <Titulo titulo="Bienvenido a ParkingNET" />
+          
+         
             <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="subtitle1">Busca por direccion</Typography>
             <Grid container spacing={2} sx={{ paddingTop: '10px' , border: '1px solid' }}>
               <Grid item md={4}>
@@ -176,20 +99,7 @@ const Main = ({usuario, pubSelected}) => {
                   searchBarWidth='720px'
                 />
               </Grid>
-              <Grid item md={3}>
-              <Typography  align = "justify" paragraph="true" overflor="scroll" height="1px" variant="body1"> Radio (KM)</Typography>
-                  <Slider 
-                  
-                    min = {1}
-                    step={1}
-                    max={500}
-                    onChange={(event) => setRadio(event.target.value)}
-                    track={"normal"}
-                    valueLabelDisplay={"auto"}
-                  
-                  />
-                 
-              </Grid>
+             
               <Grid item md ={4} sx={{paddingLeft:'200px'}}>
                 <Button variant="outlined" color="success" onClick={() => handleSearchByAddress()}>Buscar</Button>
                 <Button variant="outlined" color="success" onClick={() => setDefault()}>Todas</Button>
@@ -197,60 +107,58 @@ const Main = ({usuario, pubSelected}) => {
           
               
             </Grid>
-            </Container>
+          </Container>
 
-            <Box >
-            <Titulo titulo = "Publicaciones"/>  
-              <Grid container   rowSpacing={3}  columnSpacing={3} align={"center"}>
-                
-                {publicacionesFiltradas.map(item => (
-                  <div>
-                    <h2>{item.autor} </h2>
-                    
-                    <Card Card sx={{ width:'650px' , height:'800px' ,  marginRight:'10px', marginBottom:'10px',  border: '3px solid #BF40BF' ,  padding:"5px"  ,  borderRadius: 5}} >
-                      <CardMedia
-                        image={item.foto}
-                        title={item.titulo}
-                      />
-                      <CardContent>
-                        <h2>{item.titulo}</h2>
-                        <p>Ubicacion: {item.ubicacion}</p>
-                        <p>Fecha: {(new Date(item.fecha.$date).toDateString())}</p>
-                        <Box sx={{overflow: 'auto', p:1, m:1, height:"475px"}}> <img src={item.foto} alt="image" /></Box>
-                        <p><h3>Likes:{item.likes.length}</h3></p>
-                        <p><h3>Comentarios:{item.comentarios.length}</h3></p>
-                      </CardContent>
-                        
-                      <CardActions>
-                      <Button variant="contained" onClick={() => handleButton(item)}>Ver mas</Button>
-
-                      {usuario === item.autor && 
-                        <div>
-                          <Button variant="contained" color="error" onClick={() => handleDelete(item._id.$oid)}>Borrar</Button>
-                        </div>
-
-                      }
-                      </CardActions>
-  
-                    </Card>
-
-                  </div>
-                    
-                ))}
-                
-              </Grid>
-
-             </Box>
-         
-              <h2>Publicaciones:</h2>
-              <Container maxWidth="xl" sx={{ mb: 3 }}>
+           
+          <h2>Parkings:</h2>
+          <Container maxWidth="xl" sx={{ mb: 3 }}>
                       
-              <Mapa publicaciones={publicacionesFiltradas} />                
-              </Container>
+          <Mapa aparcamientos={aparcamientosFiltrados} />                
+          </Container>
           
+          <Container>
+          <Titulo titulo = "Detalles"/>  
+                <Grid container   rowSpacing={3}  columnSpacing={3} align={"center"}>
+                  
+                {aparcamientosFiltrados.map(item => (
+                    <div>
+                      <h2>{item.nombre} </h2>
+                      
+                      <Card Card sx={{ width:'650px' ,  marginRight:'10px', marginBottom:'10px',  border: '3px solid #BF40BF' ,  padding:"5px"  ,  borderRadius: 5}} >
+                        <CardMedia
+                          image={item.foto}
+                          title={item.titulo}
+                        />
+                        <CardContent>
+                          <p>Ubicacion: {item.direccion}</p>
+                          <p>latitud: {item.latitud} longitud:{item.longitud}</p>
+                          <p>Capacidad: {item.capacidad}</p>
+                          <p>libres: {item.libres}</p>
+                          <p>correo: {item.correo}</p>
+                
+                          
+                        </CardContent>
+                          
+                        
+    
+                      </Card>
 
-         
+                    </div>
+                      
+                  ))}
+                  
+                </Grid>
+
+          </Container>
+           
+             
+                
+
+             
+       
         </div >
+
+        
         
       )
 

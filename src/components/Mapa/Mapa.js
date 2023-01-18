@@ -1,6 +1,5 @@
-
-
-import React from 'react'
+/* eslint-disable */
+import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Box } from '@mui/material';
 import L from 'leaflet';
@@ -13,8 +12,8 @@ function defaultIcon() {
   });
 };
 
-const Mapa = ({ publicaciones }) => {
-  const coordenadas = [40.41831, -3.70275];
+const Mapa = ({ aparcamientos }) => {
+  const coordenadas = [36.72184282369917, -4.418403224132213];
 
   return (
     <Box sx={Styler.mapa}>
@@ -22,7 +21,7 @@ const Mapa = ({ publicaciones }) => {
         class="leaflet-container"
         /*style={{ width: "100%", height: "70vh" }}*/
         center={coordenadas}
-        zoom={4}
+        zoom={13}
         removeOutsideVisibleBounds={false}
         scrollWheelZoom={true}>
         <TileLayer
@@ -30,22 +29,17 @@ const Mapa = ({ publicaciones }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-      {publicaciones.map((publicacion, idx) =>
-        <div>
-          {publicacion.lat !== null && publicacion.lon !== null &&
-           <Marker
-                  key={`publicacion-${idx}`}
-                  position={[publicacion.lat, publicacion.lon]}
-                  icon={defaultIcon()}>
-                  <Popup>
-                    {publicacion.titulo}
-                  </Popup>
-                </Marker>
-          }
-        </div>
+        {aparcamientos.map((aparcamiento, idx) =>
+          <Marker
+            key={`aparcamiento-${idx}`}
+            position={[aparcamiento.latitud, aparcamiento.longitud]}
+            icon={defaultIcon()}>
+            <Popup>
+              {aparcamiento.nombre}
+            </Popup>
+          </Marker>
+        )}
 
-        )}      
-        
       </MapContainer>
     </Box>
   )
