@@ -81,7 +81,7 @@ const Main = ({usuario, pubSelected}) => {
         <CircularProgress />
       </div>);
     /******************************** MOSTRAR FILTROS Y FOTOS ********************************/
-  } else {
+  } else if (usuario !== "") {
     
       return (
         <div class="page" style={Styler.page}>
@@ -164,6 +164,17 @@ const Main = ({usuario, pubSelected}) => {
 
     
     
+  }else{
+    return(
+   
+      <div class="page" style={Styler.page}>
+          <Container maxWidth="xl" spacing={2} sx={{ mb: 3 }}>
+            <Titulo titulo="Bienvenido a ParkingNET" />
+            <p>Por favor inicie sesión, para empezar a ver el contenido</p>
+          </Container>
+         
+    </div>
+    )
   }
 }
 
